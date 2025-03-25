@@ -1,8 +1,8 @@
 import { PaginatedUsers } from '../../models/User';
 import { PaginatedGroups } from '../../models/Group';
-import { AlreadyJoinedError, NotFoundError, NotJoinedError } from '../../errors';
 import { UserGroupRepository } from '../../repositories/userGroupRepository';
 import logger from '../../utils/logger';
+import { AlreadyJoinedError, NotFoundError, NotJoinedError } from '../../errors/customErrors';
 
 export class UserGroupService {
     static async addUserToGroup(userId: number, groupId: number): Promise<void> {

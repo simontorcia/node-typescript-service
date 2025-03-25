@@ -1,6 +1,6 @@
 import { UserRepository } from '../../repositories/userRepository';
 import { User, PaginatedUsers } from '../../models/User';
-import { NotFoundError } from '../../errors';
+import { NotFoundError } from '../../errors/customErrors';
 import logger from '../../utils/logger';
 
 export class UserService {

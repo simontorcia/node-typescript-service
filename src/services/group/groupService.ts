@@ -1,7 +1,7 @@
 import { GroupRepository } from '../../repositories/groupRepository';
 import { Group, PaginatedGroups } from '../../models/Group';
-import { NotFoundError } from '../../errors';
 import logger from '../../utils/logger';
+import { NotFoundError } from '../../errors/customErrors';
 
 export class GroupService {
     static async createGroup(name: string): Promise<number> {
