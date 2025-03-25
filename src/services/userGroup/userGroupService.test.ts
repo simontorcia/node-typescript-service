@@ -1,4 +1,4 @@
-import { AlreadyJoinedError, NotFoundError, NotJoinedError } from "../../errors/Error";
+import { AlreadyJoinedError, NotFoundError, NotJoinedError } from "../../errors/customErrors";
 import { PaginatedGroups } from "../../models/Group";
 import { PaginatedUsers } from "../../models/User";
 import { UserGroupRepository } from "../../repositories/userGroupRepository";

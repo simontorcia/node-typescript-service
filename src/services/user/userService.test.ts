@@ -1,6 +1,6 @@
 import { UserService } from './userService';
 import { User } from '../../models/User';
-import { NotFoundError } from '../../errors/Error';
+import { NotFoundError } from '../../errors/customErrors';
 import { UserRepository } from '../../repositories/userRepository';
 
 // Mocking UserRepository

@@ -1,7 +1,7 @@
 import { GroupService } from './groupService';
 import { GroupRepository } from '../../repositories/groupRepository';
 import { Group, PaginatedGroups } from '../../models/Group';
-import { NotFoundError } from '../../errors/Error';
+import { NotFoundError } from '../../errors/customErrors';
 
 // Mocking GroupRepository
 jest.mock('../../repositories/groupRepository');
