@@ -32,4 +32,4 @@ coverage
 .DS_Store
 
 # Mysql files
-*.sql
+# *.sql
