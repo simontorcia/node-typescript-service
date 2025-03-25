@@ -6,7 +6,7 @@ import { NotFoundError } from '../../models/Error';
 // Mocking UserRepo
 jest.mock('../../repositories/userRepo');
 
-// Correzione del percorso qui
+// Mocking DB
 jest.mock('../../database/config/db', () => ({
     connect: jest.fn(),
     query: jest.fn(),
@@ -62,7 +62,7 @@ describe('UserService', () => {
             const result = await UserService.getUserById(1);
 
             expect(UserRepo.getUserById).toHaveBeenCalledWith(1);
-            expect(result).toEqual(mockUser); // Usa toEqual per confrontare oggetti
+            expect(result).toEqual(mockUser);
         });
 
         it('should throw NotFoundError if UserRepo.getUserById returns null', async () => {

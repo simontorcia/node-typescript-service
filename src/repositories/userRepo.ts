@@ -17,7 +17,6 @@ export class UserRepo {
     static async createUser(user: Readonly<User>): Promise<number> {
         return this.handleDatabaseOperation(async () => {
             const { name, surname, birth_date, sex } = user;
-            console.log('Valore di sex:', sex); // Aggiungi questa riga
             const [result] = await pool.execute<ResultSetHeader>(INSERT_USER, [name, surname, birth_date, sex]);
             return result.insertId;
         });

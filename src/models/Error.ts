@@ -29,7 +29,7 @@ export class AlreadyJoinedError extends ConflictError {
     constructor(message: string) {
         super(message);
         this.code = 'ALREADY_JOINED';
-        this.statusCode = 409; // Specific status code for "already joined"
+        this.statusCode = 409;
     }
 }
 

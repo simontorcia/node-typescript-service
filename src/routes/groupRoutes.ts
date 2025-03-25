@@ -1,4 +1,3 @@
-// routes/groupRoutes.ts
 import { Router } from 'express';
 import { GroupController } from '../controllers/GroupController';
 import { validateBody, validateParams } from '../middlewares/validate';

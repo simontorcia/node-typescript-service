@@ -1,5 +1,3 @@
-// queries/userGroupQueries.ts
-
 export const CHECK_USER_EXISTS = `
   SELECT id FROM users WHERE id = ?
 `;

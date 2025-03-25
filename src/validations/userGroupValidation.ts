@@ -7,6 +7,6 @@ export const addUserToGroupSchema = Joi.object({
 
 // Schema per la rimozione di un utente da un gruppo
 export const removeUserFromGroupSchema = Joi.object({
-  id: Joi.number().integer().positive().required(),  // ID dell'utente
-  groupId: Joi.number().integer().positive().required()  // ID del gruppo
+  id: Joi.number().integer().positive().required(),
+  groupId: Joi.number().integer().positive().required()
 });

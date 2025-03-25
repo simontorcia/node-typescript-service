@@ -7,7 +7,7 @@ import { AlreadyJoinedError, NotFoundError, NotJoinedError } from '../../models/
 // Mocking UserGroupRepo
 jest.mock('../../repositories/userGroupRepo');
 
-// Correzione del percorso qui
+// Mocking DB
 jest.mock('../../database/config/db', () => ({
     connect: jest.fn(),
     query: jest.fn(),

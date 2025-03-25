@@ -6,7 +6,7 @@ import { NotFoundError } from '../../models/Error';
 // Mocking GroupRepo
 jest.mock('../../repositories/groupRepo');
 
-// Correzione del percorso qui
+// Mocking DB
 jest.mock('../../database/config/db', () => ({
     connect: jest.fn(),
     query: jest.fn(),
@@ -51,7 +51,7 @@ describe('GroupService', () => {
             const result = await GroupService.getGroupById(1);
 
             expect(GroupRepo.getGroupById).toHaveBeenCalledWith(1);
-            expect(result).toEqual(mockGroup); // Usa toEqual per confrontare oggetti
+            expect(result).toEqual(mockGroup);
         });
 
         it('should throw NotFoundError if GroupRepo.getGroupById returns null', async () => {

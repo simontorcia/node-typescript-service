@@ -4,7 +4,6 @@ export function errorHandler(err: any, req: Request, res: Response, next: NextFu
     console.error('errorHandler', err);
 
     if (err.isJoi) {
-        // Validation error from Joi
         res.status(400).json({
             code: 'VALIDATION_ERROR',
             message: 'Validation error',
