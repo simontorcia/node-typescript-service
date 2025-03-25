@@ -1,10 +1,10 @@
 import { UserService } from './userService';
-import { UserRepo } from '../../repositories/userRepo';
 import { User } from '../../models/User';
-import { NotFoundError } from '../../models/Error';
+import { NotFoundError } from '../../errors/Error';
+import { UserRepository } from '../../repositories/userRepository';
 
-// Mocking UserRepo
-jest.mock('../../repositories/userRepo');
+// Mocking UserRepository
+jest.mock('../../repositories/userRepository');
 
 // Mocking DB
 jest.mock('../../database/config/db', () => ({
@@ -19,7 +19,7 @@ describe('UserService', () => {
     });
 
     describe('createUser', () => {
-        it('should call UserRepo.createUser with the correct user data', async () => {
+        it('should call UserRepository.createUser with the correct user data', async () => {
             const user: User = {
                 name: 'Test',
                 surname: 'User',
@@ -27,14 +27,14 @@ describe('UserService', () => {
                 sex: 'male',
             };
             const mockUserId = 123;
-            (UserRepo.createUser as jest.Mock).mockResolvedValue(mockUserId);
+            (UserRepository.createUser as jest.Mock).mockResolvedValue(mockUserId);
 
             const result = await UserService.createUser(user);
 
-            expect(UserRepo.createUser).toHaveBeenCalledWith(user);
+            expect(UserRepository.createUser).toHaveBeenCalledWith(user);
             expect(result).toBe(mockUserId);
         });
-        it('should handle errors from UserRepo.createUser', async () => {
+        it('should handle errors from UserRepository.createUser', async () => {
             const user: User = {
                 name: 'Test',
                 surname: 'User',
@@ -42,14 +42,14 @@ describe('UserService', () => {
                 sex: 'male',
             };
             const mockError = new Error('Database error');
-            (UserRepo.createUser as jest.Mock).mockRejectedValue(mockError);
+            (UserRepository.createUser as jest.Mock).mockRejectedValue(mockError);
 
             await expect(UserService.createUser(user)).rejects.toThrow('Database error');
         });
     });
 
     describe('getUserById', () => {
-        it('should call UserRepo.getUserById with the correct ID', async () => {
+        it('should call UserRepository.getUserById with the correct ID', async () => {
             const mockUser: User = {
                 id: 1,
                 name: 'Test',
@@ -57,16 +57,16 @@ describe('UserService', () => {
                 birth_date: '2023-10-26',
                 sex: 'male',
             };
-            (UserRepo.getUserById as jest.Mock).mockResolvedValue(mockUser);
+            (UserRepository.getUserById as jest.Mock).mockResolvedValue(mockUser);
 
             const result = await UserService.getUserById(1);
 
-            expect(UserRepo.getUserById).toHaveBeenCalledWith(1);
+            expect(UserRepository.getUserById).toHaveBeenCalledWith(1);
             expect(result).toEqual(mockUser);
         });
 
-        it('should throw NotFoundError if UserRepo.getUserById returns null', async () => {
-            (UserRepo.getUserById as jest.Mock).mockResolvedValue(null);
+        it('should throw NotFoundError if UserRepository.getUserById returns null', async () => {
+            (UserRepository.getUserById as jest.Mock).mockResolvedValue(null);
 
             await expect(UserService.getUserById(1)).rejects.toThrow(NotFoundError);
             await expect(UserService.getUserById(1)).rejects.toThrow('User with ID 1 not found');
@@ -81,19 +81,19 @@ describe('UserService', () => {
     });
 
     describe('getUsers', () => {
-        it('should call UserRepo.getUsers with the correct limit and offset', async () => {
+        it('should call UserRepository.getUsers with the correct limit and offset', async () => {
             const mockUsers = {
                 data: [],
                 total: 0,
             };
-            (UserRepo.getUsers as jest.Mock).mockResolvedValue(mockUsers);
+            (UserRepository.getUsers as jest.Mock).mockResolvedValue(mockUsers);
 
             await UserService.getUsers(10, 0);
 
-            expect(UserRepo.getUsers).toHaveBeenCalledWith(10, 0);
+            expect(UserRepository.getUsers).toHaveBeenCalledWith(10, 0);
         });
 
-        it('should return the data from UserRepo.getUsers', async () => {
+        it('should return the data from UserRepository.getUsers', async () => {
             const mockUsers = {
                 data: [{
                     id: 1,
@@ -104,7 +104,7 @@ describe('UserService', () => {
                 }],
                 total: 1,
             };
-            (UserRepo.getUsers as jest.Mock).mockResolvedValue(mockUsers);
+            (UserRepository.getUsers as jest.Mock).mockResolvedValue(mockUsers);
 
             const result = await UserService.getUsers(10, 0);
 
@@ -113,18 +113,18 @@ describe('UserService', () => {
     });
 
     describe('updateUser', () => {
-        it('should call UserRepo.updateUser with the correct ID and updates', async () => {
+        it('should call UserRepository.updateUser with the correct ID and updates', async () => {
             const updates: Partial<User> = { name: 'Updated Name' };
-            (UserRepo.updateUser as jest.Mock).mockResolvedValue(true);
+            (UserRepository.updateUser as jest.Mock).mockResolvedValue(true);
 
             await UserService.updateUser(1, updates);
 
-            expect(UserRepo.updateUser).toHaveBeenCalledWith(1, updates);
+            expect(UserRepository.updateUser).toHaveBeenCalledWith(1, updates);
         });
 
-        it('should throw NotFoundError if UserRepo.updateUser returns false', async () => {
+        it('should throw NotFoundError if UserRepository.updateUser returns false', async () => {
             const updates: Partial<User> = { name: 'Updated Name' };
-            (UserRepo.updateUser as jest.Mock).mockResolvedValue(false);
+            (UserRepository.updateUser as jest.Mock).mockResolvedValue(false);
 
             await expect(UserService.updateUser(1, updates)).rejects.toThrow(NotFoundError);
             await expect(UserService.updateUser(1, updates)).rejects.toThrow('User with ID 1 not found');
@@ -132,16 +132,16 @@ describe('UserService', () => {
     });
 
     describe('deleteUser', () => {
-        it('should call UserRepo.deleteUser with the correct ID', async () => {
-            (UserRepo.deleteUser as jest.Mock).mockResolvedValue(true);
+        it('should call UserRepository.deleteUser with the correct ID', async () => {
+            (UserRepository.deleteUser as jest.Mock).mockResolvedValue(true);
 
             await UserService.deleteUser(1);
 
-            expect(UserRepo.deleteUser).toHaveBeenCalledWith(1);
+            expect(UserRepository.deleteUser).toHaveBeenCalledWith(1);
         });
 
-        it('should throw NotFoundError if UserRepo.deleteUser returns false', async () => {
-            (UserRepo.deleteUser as jest.Mock).mockResolvedValue(false);
+        it('should throw NotFoundError if UserRepository.deleteUser returns false', async () => {
+            (UserRepository.deleteUser as jest.Mock).mockResolvedValue(false);
 
             await expect(UserService.deleteUser(1)).rejects.toThrow(NotFoundError);
             await expect(UserService.deleteUser(1)).rejects.toThrow('User with ID 1 not found');

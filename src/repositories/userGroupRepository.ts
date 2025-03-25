@@ -1,4 +1,4 @@
-import pool from '../database/config/db';
+
 import { PaginatedUsers, User } from '../models/User';
 import { RowDataPacket } from 'mysql2/promise';
 import {
@@ -11,10 +11,12 @@ import {
     INSERT_USER_GROUP,
     COUNT_GROUP_USERS,
     COUNT_USER_GROUPS
-} from '../database/queries/userGroup';
+} from '../database/queries/userGroupQueries';
 import { Group, PaginatedGroups } from '../models/Group';
+import pool from '../database/config/db';
 
-export class UserGroupRepo {
+
+export class UserGroupRepository {
 
     private static async checkExists(query: string, id: number, entity: string): Promise<boolean> {
         const [rows] = await pool.execute<RowDataPacket[]>(query, [id]);

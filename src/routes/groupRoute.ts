@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { GroupController } from '../controllers/GroupController';
-import { validateBody, validateParams } from '../middlewares/validate';
+import { validateBody, validateParams } from '../middlewares/validator';
 import { groupSchema, updateGroupSchema } from '../validations/groupValidation';
 import { idParamSchema } from '../validations/paramsValidation';
 

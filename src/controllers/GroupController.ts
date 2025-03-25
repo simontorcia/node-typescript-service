@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { GroupService } from '../services/group/groupService';
-import { NotFoundError } from '../models/Error';
+import { NotFoundError } from '../errors/Error';
 import { calculatePagination, createPaginationMetadata } from '../utils/pagination';
 
 export class GroupController {

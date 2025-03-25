@@ -1,9 +1,11 @@
-import pool from '../database/config/db';
+
 import { User, PaginatedUsers } from '../models/User';
 import { ResultSetHeader, RowDataPacket } from 'mysql2/promise';
-import { INSERT_USER, DELETE_USER, GET_USER_BY_ID, GET_USERS_PAGINATED, COUNT_USERS } from '../database/queries/user';
+import { INSERT_USER, DELETE_USER, GET_USER_BY_ID, GET_USERS_PAGINATED, COUNT_USERS } from '../database/queries/userQueries';
+import pool from '../database/config/db';
 
-export class UserRepo {
+
+export class UserRepository {
 
     private static async handleDatabaseOperation<T>(operation: () => Promise<T>): Promise<T> {
         try {

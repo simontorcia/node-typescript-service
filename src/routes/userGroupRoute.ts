@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { UserGroupController } from '../controllers/UserGroupController';
-import { validateParams, validateBody } from '../middlewares/validate';
+import { validateParams, validateBody } from '../middlewares/validator';
 import { idParamSchema } from '../validations/paramsValidation';
 import { addUserToGroupSchema, removeUserFromGroupSchema } from '../validations/userGroupValidation';
 

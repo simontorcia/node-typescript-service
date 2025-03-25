@@ -1,10 +1,10 @@
 import { GroupService } from './groupService';
-import { GroupRepo } from '../../repositories/groupRepo';
+import { GroupRepository } from '../../repositories/groupRepository';
 import { Group, PaginatedGroups } from '../../models/Group';
-import { NotFoundError } from '../../models/Error';
+import { NotFoundError } from '../../errors/Error';
 
-// Mocking GroupRepo
-jest.mock('../../repositories/groupRepo');
+// Mocking GroupRepository
+jest.mock('../../repositories/groupRepository');
 
 // Mocking DB
 jest.mock('../../database/config/db', () => ({
@@ -19,43 +19,43 @@ describe('GroupService', () => {
     });
 
     describe('createGroup', () => {
-        it('should call GroupRepo.createGroup with the correct group name', async () => {
+        it('should call GroupRepository.createGroup with the correct group name', async () => {
             const groupName = 'Test Group';
             const mockGroupId = 123;
-            (GroupRepo.createGroup as jest.Mock).mockResolvedValue(mockGroupId);
+            (GroupRepository.createGroup as jest.Mock).mockResolvedValue(mockGroupId);
 
             const result = await GroupService.createGroup(groupName);
 
-            expect(GroupRepo.createGroup).toHaveBeenCalledWith(groupName);
+            expect(GroupRepository.createGroup).toHaveBeenCalledWith(groupName);
             expect(result).toBe(mockGroupId);
         });
 
-        it('should handle errors from GroupRepo.createGroup', async () => {
+        it('should handle errors from GroupRepository.createGroup', async () => {
             const groupName = 'Test Group';
             const mockError = new Error('Database error');
-            (GroupRepo.createGroup as jest.Mock).mockRejectedValue(mockError);
+            (GroupRepository.createGroup as jest.Mock).mockRejectedValue(mockError);
 
             await expect(GroupService.createGroup(groupName)).rejects.toThrow('Database error');
         });
     });
 
     describe('getGroupById', () => {
-        it('should call GroupRepo.getGroupById with the correct ID', async () => {
+        it('should call GroupRepository.getGroupById with the correct ID', async () => {
             const mockGroup: Group = {
                 id: 1,
                 name: 'Test Group',
                 created_at: new Date('2023-10-26T00:00:00Z')
             };
-            (GroupRepo.getGroupById as jest.Mock).mockResolvedValue(mockGroup);
+            (GroupRepository.getGroupById as jest.Mock).mockResolvedValue(mockGroup);
 
             const result = await GroupService.getGroupById(1);
 
-            expect(GroupRepo.getGroupById).toHaveBeenCalledWith(1);
+            expect(GroupRepository.getGroupById).toHaveBeenCalledWith(1);
             expect(result).toEqual(mockGroup);
         });
 
-        it('should throw NotFoundError if GroupRepo.getGroupById returns null', async () => {
-            (GroupRepo.getGroupById as jest.Mock).mockResolvedValue(null);
+        it('should throw NotFoundError if GroupRepository.getGroupById returns null', async () => {
+            (GroupRepository.getGroupById as jest.Mock).mockResolvedValue(null);
 
             await expect(GroupService.getGroupById(1)).rejects.toThrow(NotFoundError);
             await expect(GroupService.getGroupById(1)).rejects.toThrow('Group with ID 1 not found');
@@ -70,19 +70,19 @@ describe('GroupService', () => {
     });
 
     describe('getGroups', () => {
-        it('should call GroupRepo.getGroups with the correct limit and offset', async () => {
+        it('should call GroupRepository.getGroups with the correct limit and offset', async () => {
             const mockGroups: PaginatedGroups = {
                 data: [],
                 total: 0,
             };
-            (GroupRepo.getGroups as jest.Mock).mockResolvedValue(mockGroups);
+            (GroupRepository.getGroups as jest.Mock).mockResolvedValue(mockGroups);
 
             await GroupService.getGroups(10, 0);
 
-            expect(GroupRepo.getGroups).toHaveBeenCalledWith(10, 0);
+            expect(GroupRepository.getGroups).toHaveBeenCalledWith(10, 0);
         });
 
-        it('should return the data from GroupRepo.getGroups', async () => {
+        it('should return the data from GroupRepository.getGroups', async () => {
             const mockGroups: PaginatedGroups = {
                 data: [{
                     id: 1,
@@ -91,7 +91,7 @@ describe('GroupService', () => {
                 }],
                 total: 1,
             };
-            (GroupRepo.getGroups as jest.Mock).mockResolvedValue(mockGroups);
+            (GroupRepository.getGroups as jest.Mock).mockResolvedValue(mockGroups);
 
             const result = await GroupService.getGroups(10, 0);
 
@@ -100,18 +100,18 @@ describe('GroupService', () => {
     });
 
     describe('updateGroup', () => {
-        it('should call GroupRepo.updateGroup with the correct ID and group name', async () => {
+        it('should call GroupRepository.updateGroup with the correct ID and group name', async () => {
             const updatesName = 'Updated Group Name';
-            (GroupRepo.updateGroup as jest.Mock).mockResolvedValue(true);
+            (GroupRepository.updateGroup as jest.Mock).mockResolvedValue(true);
 
             await GroupService.updateGroup(1, updatesName);
 
-            expect(GroupRepo.updateGroup).toHaveBeenCalledWith(1, updatesName);
+            expect(GroupRepository.updateGroup).toHaveBeenCalledWith(1, updatesName);
         });
 
-        it('should throw NotFoundError if GroupRepo.updateGroup returns false', async () => {
+        it('should throw NotFoundError if GroupRepository.updateGroup returns false', async () => {
             const updatesName = 'Updated Group Name';
-            (GroupRepo.updateGroup as jest.Mock).mockResolvedValue(false);
+            (GroupRepository.updateGroup as jest.Mock).mockResolvedValue(false);
 
             await expect(GroupService.updateGroup(1, updatesName)).rejects.toThrow(NotFoundError);
             await expect(GroupService.updateGroup(1, updatesName)).rejects.toThrow('Group with ID 1 not found');
@@ -119,16 +119,16 @@ describe('GroupService', () => {
     });
 
     describe('deleteGroup', () => {
-        it('should call GroupRepo.deleteGroup with the correct ID', async () => {
-            (GroupRepo.deleteGroup as jest.Mock).mockResolvedValue(true);
+        it('should call GroupRepository.deleteGroup with the correct ID', async () => {
+            (GroupRepository.deleteGroup as jest.Mock).mockResolvedValue(true);
 
             await GroupService.deleteGroup(1);
 
-            expect(GroupRepo.deleteGroup).toHaveBeenCalledWith(1);
+            expect(GroupRepository.deleteGroup).toHaveBeenCalledWith(1);
         });
 
-        it('should throw NotFoundError if GroupRepo.deleteGroup returns false', async () => {
-            (GroupRepo.deleteGroup as jest.Mock).mockResolvedValue(false);
+        it('should throw NotFoundError if GroupRepository.deleteGroup returns false', async () => {
+            (GroupRepository.deleteGroup as jest.Mock).mockResolvedValue(false);
 
             await expect(GroupService.deleteGroup(1)).rejects.toThrow(NotFoundError);
             await expect(GroupService.deleteGroup(1)).rejects.toThrow('Group with ID 1 not found');

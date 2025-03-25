@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { AlreadyJoinedError, NotFoundError, NotJoinedError } from '../models/Error';
+import { AlreadyJoinedError, NotFoundError, NotJoinedError } from '../errors/Error';
 import { UserGroupService } from '../services/userGroup/userGroupService';
 
 export class UserGroupController {

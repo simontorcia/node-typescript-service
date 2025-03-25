@@ -1,9 +1,11 @@
-import pool from '../database/config/db';
+
 import { Group, PaginatedGroups } from '../models/Group';
 import { ResultSetHeader, RowDataPacket } from 'mysql2/promise';
-import { COUNT_GROUPS, DELETE_GROUP, GET_ALL_GROUPS, GET_GROUP_BY_ID, GET_GROUPS_PAGINATED, INSERT_GROUP, UPDATE_GROUP } from '../database/queries/group';
+import { COUNT_GROUPS, DELETE_GROUP, GET_ALL_GROUPS, GET_GROUP_BY_ID, GET_GROUPS_PAGINATED, INSERT_GROUP, UPDATE_GROUP } from '../database/queries/groupQueries';
+import pool from '../database/config/db';
 
-export class GroupRepo {
+
+export class GroupRepository {
 
     private static async handleDatabaseOperation<T>(operation: () => Promise<T>): Promise<T> {
         try {

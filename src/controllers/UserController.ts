@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { UserService } from '../services/user/userService';
-import { NotFoundError } from '../models/Error';
+import { NotFoundError } from '../errors/Error';
 import { calculatePagination, createPaginationMetadata } from '../utils/pagination';
 import { User } from '../models/User';
 

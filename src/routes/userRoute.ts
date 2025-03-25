@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 
-import { validateBody, validateQuery, validateParams } from '../middlewares/validate';
+import { validateBody, validateQuery, validateParams } from '../middlewares/validator';
 import { updateUserSchema, userSchema } from '../validations/userValidation';
 import { paginationQuerySchema } from '../validations/queryValidation';
 import { idParamSchema } from '../validations/paramsValidation';
