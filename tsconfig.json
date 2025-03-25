@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node", // Important for Node.js modules
+    "resolveJsonModule": true, // Allows importing JSON files
+    "sourceMap": true, // Generate source maps for debugging
+    "types": [
+      "jest",
+      "node"
+    ] // Include type definitions for Jest and Node.js
+  },
+  "include": [
+    "./src/**/*.ts",
+    "./src/**/*.test.ts" // Include test files
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

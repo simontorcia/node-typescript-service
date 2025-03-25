@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deleteGroupController = exports.updateGroupController = exports.getGroupByIdController = exports.getGroupsController = exports.createGroupController = void 0;
+var createGroup_1 = require("./createGroup");
+Object.defineProperty(exports, "createGroupController", { enumerable: true, get: function () { return createGroup_1.createGroupController; } });
+var getGroups_1 = require("./getGroups");
+Object.defineProperty(exports, "getGroupsController", { enumerable: true, get: function () { return getGroups_1.getGroupsController; } });
+var getGroupById_1 = require("./getGroupById");
+Object.defineProperty(exports, "getGroupByIdController", { enumerable: true, get: function () { return getGroupById_1.getGroupByIdController; } });
+var updateGroup_1 = require("./updateGroup");
+Object.defineProperty(exports, "updateGroupController", { enumerable: true, get: function () { return updateGroup_1.updateGroupController; } });
+var deleteGroup_1 = require("./deleteGroup");
+Object.defineProperty(exports, "deleteGroupController", { enumerable: true, get: function () { return deleteGroup_1.deleteGroupController; } });
