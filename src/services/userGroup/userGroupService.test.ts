@@ -8,11 +8,6 @@ import { UserGroupService } from "./userGroupService";
 // Mocking UserGroupRepository
 jest.mock('../../repositories/userGroupRepository');
 
-// Mocking DB
-jest.mock('../../database/config/db', () => ({
-    connect: jest.fn(),
-    query: jest.fn(),
-}));
 
 describe('UserGroupService', () => {
     beforeEach(() => {

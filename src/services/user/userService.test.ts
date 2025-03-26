@@ -6,11 +6,6 @@ import { UserRepository } from '../../repositories/userRepository';
 // Mocking UserRepository
 jest.mock('../../repositories/userRepository');
 
-// Mocking DB
-jest.mock('../../database/config/db', () => ({
-    connect: jest.fn(),
-    query: jest.fn(),
-}));
 
 describe('UserService', () => {
     beforeEach(() => {

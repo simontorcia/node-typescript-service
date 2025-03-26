@@ -6,11 +6,6 @@ import { NotFoundError } from '../../errors/customErrors';
 // Mocking GroupRepository
 jest.mock('../../repositories/groupRepository');
 
-// Mocking DB
-jest.mock('../../database/config/db', () => ({
-    connect: jest.fn(),
-    query: jest.fn(),
-}));
 
 describe('GroupService', () => {
     beforeEach(() => {
