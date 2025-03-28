@@ -18,7 +18,7 @@ describe('UserService', () => {
                 name: 'Test',
                 surname: 'User',
                 birth_date: '2023-10-26',
-                sex: 'male',
+                sex: 'M',
                 email: 'test@example.com',
                 password: 'password123',
             };
@@ -31,7 +31,7 @@ describe('UserService', () => {
                 name: 'Test',
                 surname: 'User',
                 birth_date: '2023-10-26',
-                sex: 'male',
+                sex: 'M',
                 email: 'test@example.com',
                 password: expect.any(String),
             });
@@ -43,7 +43,7 @@ describe('UserService', () => {
                 name: 'Test',
                 surname: 'User',
                 birth_date: '2023-10-26',
-                sex: 'male',
+                sex: 'M',
                 email: 'test@example.com',
             };
 
@@ -56,7 +56,7 @@ describe('UserService', () => {
                 name: 'Test',
                 surname: 'User',
                 birth_date: '2023-10-26',
-                sex: 'male',
+                sex: 'M',
                 email: 'test@example.com',
                 password: 'password123',
             };
@@ -72,7 +72,7 @@ describe('UserService', () => {
                 name: 'Test',
                 surname: 'User',
                 birth_date: '2023-10-26',
-                sex: 'male',
+                sex: 'M',
                 email: 'test@example.com',
                 password: 'password123',
             };
@@ -90,7 +90,7 @@ describe('UserService', () => {
                 name: 'Test',
                 surname: 'User',
                 birth_date: '2023-10-26',
-                sex: 'male',
+                sex: 'M',
                 email: 'test@example.com',
                 password: 'someHashedPassword'
             };
@@ -130,7 +130,7 @@ describe('UserService', () => {
                     name: "test",
                     surname: "test",
                     birth_date: "1990-01-01",
-                    sex: "male",
+                    sex: "M",
                     email: 'test@example.com',
                     password: 'someHashedPassword'
                 }],
