@@ -1,14 +1,39 @@
 import { UserRepository } from '../../repositories/userRepository';
 import { User, PaginatedUsers } from '../../models/User';
-import { NotFoundError } from '../../errors/customErrors';
+import { AlreadyExistsError, MissingPasswordError, NotFoundError } from '../../errors/customErrors';
 import logger from '../../utils/logger';
+import bcrypt from 'bcrypt';
+
 
 export class UserService {
-    static async createUser(user: Readonly<User>): Promise<number> {
-        logger.info(`[UserService] Creating user: ${user.name} ${user.surname}`);
-        const userId = await UserRepository.createUser(user);
-        logger.info(`[UserService] Created user ID: ${userId}`);
-        return userId;
+
+    static async createUser(user: User): Promise<number> {
+        logger.info(`[UserService] Creating user: ${user.email}`);
+        if (!user.password) {
+            const errorMessage = 'Password is required for user creation';
+            logger.warn(`[UserService] ${errorMessage}. User: ${user.email}`);
+            throw new MissingPasswordError();
+        }
+        try {
+            const hashedPassword = await bcrypt.hash(user.password, 10);
+            const userDataForDb: User = {
+                ...user,
+                password: hashedPassword,
+                id: undefined,
+                created_at: undefined
+            };
+            const newUserId = await UserRepository.createUser(userDataForDb);
+            logger.info(`[UserService] User created with ID: ${newUserId}`);
+            return newUserId;
+        } catch (error: any) {
+            if (error.code === 'ER_DUP_ENTRY') {
+                const errorMessage = `Email '${user.email}' already exists`;
+                logger.warn(`[UserService] ${errorMessage}`);
+                throw new AlreadyExistsError(errorMessage);
+            }
+            logger.error('[UserService] Error creating user:', error);
+            throw error;
+        }
     }
 
     static async deleteUser(id: number): Promise<void> {
