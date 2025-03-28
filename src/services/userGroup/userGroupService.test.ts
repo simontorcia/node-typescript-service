@@ -67,7 +67,9 @@ describe('UserGroupService', () => {
                     name: "Test User",
                     surname: "User",
                     birth_date: "1990-01-01",
-                    sex: "male"
+                    sex: "male",
+                    email: "test@example.com",
+                    password: "mockPassword"
                 }],
                 total: 1,
             };
