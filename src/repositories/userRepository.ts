@@ -5,7 +5,8 @@ import {
     DELETE_USER,
     GET_USER_BY_ID,
     GET_USERS_PAGINATED,
-    COUNT_USERS
+    COUNT_USERS,
+    GET_USER_BY_EMAIL
 } from '../database/queries/userQueries';
 import pool from '../database/config/db';
 import logger from '../utils/logger';
@@ -20,11 +21,11 @@ export class UserRepository {
         }
     }
 
-    static async createUser(user: Readonly<User>): Promise<number> {
+    static async createUser(user: User): Promise<number> {
         return this.handleDatabaseOperation(async () => {
-            const { name, surname, birth_date, sex } = user;
-            logger.info(`[UserRepository] Inserting user: ${name} ${surname}`);
-            const [result] = await pool.execute<ResultSetHeader>(INSERT_USER, [name, surname, birth_date, sex]);
+            const { name, surname, birth_date, sex, email, password } = user;
+            logger.info(`[UserRepository] Inserting user: ${name} ${surname} ${email}`);
+            const [result] = await pool.execute<ResultSetHeader>(INSERT_USER, [name, surname, birth_date, sex, email, password]);
             return result.insertId;
         }, 'createUser');
     }
@@ -73,5 +74,13 @@ export class UserRepository {
             const [result] = await pool.execute<ResultSetHeader>(query, values);
             return result.affectedRows > 0;
         }, 'updateUser');
+    }
+
+    static async getUserByEmail(email: string): Promise<User | null> {
+        return this.handleDatabaseOperation(async () => {
+            logger.debug(`[UserRepository] Fetching user by email: ${email}`);
+            const [rows] = await pool.execute<RowDataPacket[]>(GET_USER_BY_EMAIL, [email]);
+            return rows.length > 0 ? rows[0] as User : null;
+        }, 'getUserByEmail');
     }
 }
