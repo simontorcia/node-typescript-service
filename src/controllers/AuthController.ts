@@ -7,7 +7,13 @@ export class AuthController {
     static async login(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { email, password } = req.body;
+
+            logger.debug(`[AuthController] Attempting login for user: ${email}`); // Log di debug
+
             const { user, token } = await AuthService.login(email, password);
+
+            logger.info(`[AuthController] User ${email} logged in successfully`); // Log di successo
+
             res.json({ user, token });
 
         } catch (error) {
