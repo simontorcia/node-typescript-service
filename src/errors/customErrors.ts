@@ -35,3 +35,9 @@ export class MissingPasswordError extends ApiError {
         super(400, 'Password is required for user creation', 'MISSING_PASSWORD');
     }
 }
+
+export class AuthenticationError extends ApiError {
+    constructor(message: string) {
+        super(401, message, 'AUTHENTICATION_FAILED');
+    }
+}
