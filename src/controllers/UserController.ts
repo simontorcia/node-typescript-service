@@ -2,12 +2,21 @@ import { Request, Response, NextFunction } from 'express';
 import { UserService } from '../services/user/userService';
 import { calculatePagination, createPaginationMetadata } from '../utils/pagination';
 import { User } from '../models/User';
+import { AlreadyExistsError } from '../errors/customErrors';
 
 export class UserController {
     static async createUser(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const user: User = req.body;
-        const userId = await UserService.createUser(user);
-        res.status(201).json({ userId });
+        try {
+            const user = req.body;
+            const userId = await UserService.createUser(user);
+            res.status(201).json({ userId });
+        } catch (error) {
+            if (error instanceof AlreadyExistsError) {
+                res.status(409).json({ message: error.message, code: error.code }); // Invia 409
+            } else {
+                next(error);
+            }
+        }
     }
 
     static async deleteUser(req: Request, res: Response, next: NextFunction): Promise<void> {
