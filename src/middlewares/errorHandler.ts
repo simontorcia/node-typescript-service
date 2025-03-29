@@ -6,7 +6,6 @@ import { ApiError } from '../errors/ApiError';
 export function errorHandler(err: any, req: Request, res: Response, next: NextFunction): void {
     logger.error('❌ errorHandler:', err);
 
-    // Joi validation error
     if (err.isJoi) {
         res.status(400).json({
             code: 'VALIDATION_ERROR',
@@ -15,7 +14,6 @@ export function errorHandler(err: any, req: Request, res: Response, next: NextFu
         });
     }
 
-    // Custom ApiError
     if (err instanceof ApiError) {
         res.status(err.status).json({
             code: err.code,
@@ -23,7 +21,6 @@ export function errorHandler(err: any, req: Request, res: Response, next: NextFu
         });
     }
 
-    // Generic fallback
     res.status(500).json({
         code: 'INTERNAL_SERVER_ERROR',
         message: 'Internal server error',

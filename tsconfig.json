@@ -10,6 +10,10 @@
     "moduleResolution": "node", // Important for Node.js modules
     "resolveJsonModule": true, // Allows importing JSON files
     "sourceMap": true, // Generate source maps for debugging
+    "typeRoots": [
+      "node_modules/@types",
+      "src/types"
+    ],
     "types": [
       "jest",
       "node"

@@ -29,3 +29,15 @@ export class NotJoinedError extends ConflictError {
         super(message, 'NOT_JOINED');
     }
 }
+
+export class MissingPasswordError extends ApiError {
+    constructor() {
+        super(400, 'Password is required for user creation', 'MISSING_PASSWORD');
+    }
+}
+
+export class AuthenticationError extends ApiError {
+    constructor(message: string) {
+        super(401, message, 'AUTHENTICATION_FAILED');
+    }
+}

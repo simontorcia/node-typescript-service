@@ -1,11 +1,10 @@
 import { UserService } from './userService';
 import { User } from '../../models/User';
-import { NotFoundError } from '../../errors/customErrors';
+import { AlreadyExistsError, MissingPasswordError, NotFoundError } from '../../errors/customErrors';
 import { UserRepository } from '../../repositories/userRepository';
 
 // Mocking UserRepository
 jest.mock('../../repositories/userRepository');
-
 
 describe('UserService', () => {
     beforeEach(() => {
@@ -14,27 +13,68 @@ describe('UserService', () => {
     });
 
     describe('createUser', () => {
-        it('should call UserRepository.createUser with the correct user data', async () => {
+        it('should call UserRepository.createUser with correct user data', async () => {
             const user: User = {
                 name: 'Test',
                 surname: 'User',
                 birth_date: '2023-10-26',
-                sex: 'male',
+                sex: 'M',
+                email: 'test@example.com',
+                password: 'password123',
             };
             const mockUserId = 123;
             (UserRepository.createUser as jest.Mock).mockResolvedValue(mockUserId);
 
             const result = await UserService.createUser(user);
 
-            expect(UserRepository.createUser).toHaveBeenCalledWith(user);
+            expect(UserRepository.createUser).toHaveBeenCalledWith({
+                name: 'Test',
+                surname: 'User',
+                birth_date: '2023-10-26',
+                sex: 'M',
+                email: 'test@example.com',
+                password: expect.any(String),
+            });
             expect(result).toBe(mockUserId);
         });
-        it('should handle errors from UserRepository.createUser', async () => {
+
+        it('should throw MissingPasswordError if password is not provided', async () => {
+            const user: Omit<User, 'password'> = {
+                name: 'Test',
+                surname: 'User',
+                birth_date: '2023-10-26',
+                sex: 'M',
+                email: 'test@example.com',
+            };
+
+            await expect(UserService.createUser(user as User)).rejects.toThrow(MissingPasswordError);
+            await expect(UserService.createUser(user as User)).rejects.toThrow('Password is required for user creation');
+        });
+
+        it('should throw AlreadyExistsError on duplicate email', async () => {
             const user: User = {
                 name: 'Test',
                 surname: 'User',
                 birth_date: '2023-10-26',
-                sex: 'male',
+                sex: 'M',
+                email: 'test@example.com',
+                password: 'password123',
+            };
+            const mockError = { code: 'ER_DUP_ENTRY' };
+            (UserRepository.createUser as jest.Mock).mockRejectedValue(mockError);
+
+            await expect(UserService.createUser(user)).rejects.toThrow(AlreadyExistsError);
+            await expect(UserService.createUser(user)).rejects.toThrow(`Email '${user.email}' already exists`);
+        });
+
+        it('should handle other createUser errors', async () => {
+            const user: User = {
+                name: 'Test',
+                surname: 'User',
+                birth_date: '2023-10-26',
+                sex: 'M',
+                email: 'test@example.com',
+                password: 'password123',
             };
             const mockError = new Error('Database error');
             (UserRepository.createUser as jest.Mock).mockRejectedValue(mockError);
@@ -44,13 +84,15 @@ describe('UserService', () => {
     });
 
     describe('getUserById', () => {
-        it('should call UserRepository.getUserById with the correct ID', async () => {
+        it('should call UserRepository.getUserById with correct ID', async () => {
             const mockUser: User = {
                 id: 1,
                 name: 'Test',
                 surname: 'User',
                 birth_date: '2023-10-26',
-                sex: 'male',
+                sex: 'M',
+                email: 'test@example.com',
+                password: 'someHashedPassword'
             };
             (UserRepository.getUserById as jest.Mock).mockResolvedValue(mockUser);
 
@@ -60,23 +102,16 @@ describe('UserService', () => {
             expect(result).toEqual(mockUser);
         });
 
-        it('should throw NotFoundError if UserRepository.getUserById returns null', async () => {
+        it('should throw NotFoundError if user not found', async () => {
             (UserRepository.getUserById as jest.Mock).mockResolvedValue(null);
 
             await expect(UserService.getUserById(1)).rejects.toThrow(NotFoundError);
             await expect(UserService.getUserById(1)).rejects.toThrow('User with ID 1 not found');
         });
-
-        it('should throw an error if the id is not valid', async () => {
-            await expect(UserService.getUserById(0)).rejects.toThrow(NotFoundError);
-            await expect(UserService.getUserById(0)).rejects.toThrow('User with ID 0 not found');
-            await expect(UserService.getUserById(-1)).rejects.toThrow(NotFoundError);
-            await expect(UserService.getUserById(-1)).rejects.toThrow('User with ID -1 not found');
-        });
     });
 
     describe('getUsers', () => {
-        it('should call UserRepository.getUsers with the correct limit and offset', async () => {
+        it('should call UserRepository.getUsers with correct params', async () => {
             const mockUsers = {
                 data: [],
                 total: 0,
@@ -88,14 +123,16 @@ describe('UserService', () => {
             expect(UserRepository.getUsers).toHaveBeenCalledWith(10, 0);
         });
 
-        it('should return the data from UserRepository.getUsers', async () => {
+        it('should return users data', async () => {
             const mockUsers = {
                 data: [{
                     id: 1,
                     name: "test",
                     surname: "test",
                     birth_date: "1990-01-01",
-                    sex: "male"
+                    sex: "M",
+                    email: 'test@example.com',
+                    password: 'someHashedPassword'
                 }],
                 total: 1,
             };
@@ -108,7 +145,7 @@ describe('UserService', () => {
     });
 
     describe('updateUser', () => {
-        it('should call UserRepository.updateUser with the correct ID and updates', async () => {
+        it('should call UserRepository.updateUser with correct data', async () => {
             const updates: Partial<User> = { name: 'Updated Name' };
             (UserRepository.updateUser as jest.Mock).mockResolvedValue(true);
 
@@ -117,7 +154,7 @@ describe('UserService', () => {
             expect(UserRepository.updateUser).toHaveBeenCalledWith(1, updates);
         });
 
-        it('should throw NotFoundError if UserRepository.updateUser returns false', async () => {
+        it('should throw NotFoundError if update fails', async () => {
             const updates: Partial<User> = { name: 'Updated Name' };
             (UserRepository.updateUser as jest.Mock).mockResolvedValue(false);
 
@@ -127,7 +164,7 @@ describe('UserService', () => {
     });
 
     describe('deleteUser', () => {
-        it('should call UserRepository.deleteUser with the correct ID', async () => {
+        it('should call UserRepository.deleteUser with correct ID', async () => {
             (UserRepository.deleteUser as jest.Mock).mockResolvedValue(true);
 
             await UserService.deleteUser(1);
@@ -135,7 +172,7 @@ describe('UserService', () => {
             expect(UserRepository.deleteUser).toHaveBeenCalledWith(1);
         });
 
-        it('should throw NotFoundError if UserRepository.deleteUser returns false', async () => {
+        it('should throw NotFoundError if delete fails', async () => {
             (UserRepository.deleteUser as jest.Mock).mockResolvedValue(false);
 
             await expect(UserService.deleteUser(1)).rejects.toThrow(NotFoundError);

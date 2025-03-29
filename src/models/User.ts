@@ -2,8 +2,10 @@ export interface User {
   id?: number;
   name: string;
   surname: string;
-  birth_date: string; // YYYY-MM-DD
-  sex: 'male' | 'female' | 'other';
+  birth_date: string;
+  sex: 'M' | 'F' | 'O';
+  email: string;
+  password?: string;
   created_at?: Date;
 }
 

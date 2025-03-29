@@ -4,6 +4,8 @@ CREATE TABLE IF NOT EXISTS users (
   surname VARCHAR(50) NOT NULL,
   birth_date DATE NOT NULL,
   sex ENUM('M', 'F', 'O') NOT NULL,
+  email VARCHAR(100) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -24,3 +26,4 @@ CREATE TABLE IF NOT EXISTS user_groups (
 
 CREATE INDEX idx_user_groups_user_id ON user_groups(user_id);
 CREATE INDEX idx_user_groups_group_id ON user_groups(group_id);
+CREATE INDEX idx_users_email ON users(email);

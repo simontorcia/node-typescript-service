@@ -1,19 +1,21 @@
 import express, { Request, Response } from 'express';
-import userRoute from './routes/userRoute';
-import groupRoute from './routes/groupRoute';
-import userGroupRoute from './routes/userGroupRoute';
+import usersRoutes from './routes/userRoute';
+import authRoutes from './routes/authRoute';
+import groupsRoutes from './routes/groupRoute';
+import userGroupsRoutes from './routes/userGroupRoute';
 import { errorHandler } from './middlewares/errorHandler';
 
 const app = express();
 app.use(express.json());
 
-app.get('/test', (req: Request, res: Response): void => {
+app.get('/api/test', (req: Request, res: Response): void => {
     res.send('Funziona! 🚀');
 });
 
-app.use('/api/users', userRoute);
-app.use('/api/groups', groupRoute);
-app.use('/api', userGroupRoute);
+app.use('/api/auth', authRoutes);
+app.use('/api/users', usersRoutes);
+app.use('/api/groups', groupsRoutes);
+app.use('/api/user-groups', userGroupsRoutes);
 
 app.use(errorHandler);
 

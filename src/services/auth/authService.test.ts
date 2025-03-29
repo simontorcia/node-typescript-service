@@ -2,12 +2,10 @@ import { AlreadyJoinedError, NotFoundError, NotJoinedError } from "../../errors/
 import { PaginatedGroups } from "../../models/Group";
 import { PaginatedUsers } from "../../models/User";
 import { UserGroupRepository } from "../../repositories/userGroupRepository";
-import { UserGroupService } from "./userGroupService";
-
+import { UserGroupService } from "../userGroup/userGroupService";
 
 // Mocking UserGroupRepository
 jest.mock('../../repositories/userGroupRepository');
-
 
 describe('UserGroupService', () => {
     beforeEach(() => {
@@ -68,8 +66,8 @@ describe('UserGroupService', () => {
                     surname: "User",
                     birth_date: "1990-01-01",
                     sex: "M",
-                    email: "test@example.com",
-                    password: "mockPassword"
+                    email: 'test@example.com', // Aggiunta email
+                    password: 'someHashedPassword' // Aggiunta password
                 }],
                 total: 1,
             };
